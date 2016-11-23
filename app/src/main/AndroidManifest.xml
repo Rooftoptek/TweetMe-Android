@@ -1,0 +1,87 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="io.rftp.tweetme">
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
+    <!-- PUSH Notification block -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <!--
+    GET_ACCOUNTS is only required for GCM on devices running Android lower than
+    4.0.4. You may leave out this permission if you are targetting 4.0.4+.
+    -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+
+    <!--
+    IMPORTANT: Change "io.rftp.starter.permission.C2D_MESSAGE" in the lines below
+    to match your apps package name + ".permission.C2D_MESSAGE".
+    -->
+    <permission android:protectionLevel="signature"
+                android:name="io.rftp.tweetme.permission.C2D_MESSAGE" />
+    <uses-permission android:name="io.rftp.tweetme.permission.C2D_MESSAGE" />
+    <!-- end PUSH Notification block -->
+
+    <application
+        android:name=".StartApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity android:name=".LoginActivity"/>
+        <activity android:name=".CreatePostActivity"/>
+        <meta-data
+            android:name="io.rftp.APPLICATION_ID"
+            android:value="@string/rooftop_app_id" />
+        <meta-data
+            android:name="io.rftp.CLIENT_KEY"
+            android:value="@string/rooftop_client_key" />
+        <meta-data
+            android:name="io.rftp.IDENTITY_POOL_ID"
+            android:value="@string/rooftop_identity_pool_id" />
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+
+        <!-- PUSH Notification block -->
+        <service android:name="io.rftp.RTPushService" />
+        <receiver android:name="io.rftp.RTPushBroadcastReceiver"
+                  android:exported="false">
+            <intent-filter>
+                <action android:name="io.rftp.push.intent.RECEIVE" />
+                <action android:name="io.rftp.push.intent.DELETE" />
+                <action android:name="io.rftp.push.intent.OPEN" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name="io.rftp.RTGcmBroadcastReceiver"
+                  android:permission="com.google.android.c2dm.permission.SEND">
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+
+                <!--IMPORTANT: Change "io.rftp.tweetme" to match your apps package name.-->
+                <category android:name="io.rftp.tweetme" />
+            </intent-filter>
+        </receiver>
+
+        <!--
+        IMPORTANT: Create string value "gcm_sender_id" in strings.xml with your GCM Sender Id
+        in format id:YOUR_SENDER_ID.
+        -->
+        <meta-data android:name="io.rftp.push.gcm_sender_id"
+                   android:value="@string/gcm_sender_id" />
+        <meta-data android:name="io.rftp.push.notification_icon"
+                   android:resource="@drawable/push_notification_icon"/>
+        <!-- end PUSH Notification block -->
+
+    </application>
+
+</manifest>

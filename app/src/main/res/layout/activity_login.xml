@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" android:padding="16dp">
+
+  <LinearLayout
+      android:orientation="vertical"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:id="@+id/appNameLayout"
+      android:layout_alignParentTop="true"
+      android:layout_alignParentLeft="true" android:layout_alignParentStart="true"
+      android:layout_marginTop="22dp">
+    <ImageView
+        android:layout_width="match_parent"
+        app:srcCompat="@drawable/bird"
+        android:id="@+id/imageView" android:scaleType="fitCenter"
+        android:contentDescription="@string/application_face_picture" android:layout_height="78dp"/>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+      <TextView
+          android:text="@string/tweet"
+          android:textSize="28sp"
+          android:textColor="@color/colorPurple"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content" android:id="@+id/appNameOneTV"
+          android:layout_weight="1" android:gravity="end"
+          android:typeface="monospace"/>
+      <TextView
+          android:text="@string/me"
+          android:textSize="28sp"
+          android:textColor="@color/colorOrange"
+          android:textStyle="bold"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content" android:id="@+id/appNameTwoTV"
+          android:layout_weight="1"
+          android:typeface="monospace"/>
+    </LinearLayout>
+  </LinearLayout>
+  <LinearLayout
+      android:orientation="vertical"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_centerInParent="false"
+      android:layout_alignWithParentIfMissing="false"
+      android:id="@+id/inputFieldsLayout"
+      android:layout_below="@+id/appNameLayout"
+      android:layout_marginTop="22dp"
+      android:layout_alignParentLeft="true" android:layout_alignParentStart="true">
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/loginEditText" android:layout_gravity="center_horizontal"
+        android:hint="@string/user_name"
+        android:typeface="serif" android:layout_marginLeft="12dp" android:layout_marginRight="12dp"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:ems="10"
+        android:id="@+id/passwordEditText" android:layout_gravity="center_horizontal"
+        android:hint="@string/password"
+        android:typeface="serif" android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"/>
+    <TextView
+        android:text="@string/i_don_t_have_an_account"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:id="@+id/signUpTV"
+        android:gravity="center_horizontal"
+        android:textSize="18sp"
+        android:paddingTop="20dp" android:paddingBottom="16dp"/>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:layout_gravity="center_horizontal">
+      <ImageView
+          android:layout_width="match_parent"
+          android:id="@+id/signInButton" android:layout_weight="1"
+          android:layout_margin="8dp"
+          android:layout_marginRight="4dp"
+          android:layout_marginEnd="4dp"
+          app:srcCompat="@drawable/login" android:scaleType="fitCenter"
+          android:layout_height="42dp"/>
+      <ImageView
+          android:layout_width="match_parent"
+          android:layout_height="42dp"
+          android:id="@+id/loginFacebookButton"
+          android:layout_weight="1"
+          android:layout_margin="8dp"
+          android:layout_marginLeft="4dp"
+          android:layout_marginStart="4dp"
+          android:scaleType="fitCenter"
+          app:srcCompat="@drawable/fb"/>
+
+    </LinearLayout>
+  </LinearLayout>
+</RelativeLayout>
