@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="88dp" android:background="@color/colorWhite">
+
+  <TextView
+      android:text="@string/def_time"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:id="@+id/tweetTimeTextView"
+      android:layout_marginEnd="16dp" android:layout_marginRight="16dp"
+      android:textSize="14sp" android:layout_alignTop="@+id/tweetUserIconImageView"
+      android:layout_alignParentRight="true" android:layout_alignParentEnd="true"
+      android:textColor="@color/colorHide"/>
+  <LinearLayout
+      android:orientation="vertical"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_alignParentTop="true"
+      android:layout_toRightOf="@+id/tweetUserIconImageView" android:layout_toEndOf="@+id/tweetUserIconImageView"
+      android:layout_toLeftOf="@+id/tweetTimeTextView" android:layout_toStartOf="@+id/tweetTimeTextView"
+      android:layout_marginStart="14dp" android:layout_marginLeft="14dp"
+      android:layout_marginEnd="20dp" android:layout_marginRight="20dp">
+    <TextView
+        android:text="@string/def_user_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:id="@+id/tweetUserNameTextView"
+        android:layout_marginTop="17dp" android:textSize="17sp" android:lines="1"
+        android:textColor="@color/colorPurple"/>
+    <TextView
+        android:text="@string/def_message_body"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:id="@+id/tweetBodyTextView"
+        android:layout_marginTop="3dp" android:textSize="15sp"
+        android:minLines="1"
+        android:maxLines="2" android:textColor="@color/colorHide"/>
+  </LinearLayout>
+  <ImageView
+      android:layout_width="55dp"
+      android:layout_height="55dp"
+      android:id="@+id/tweetUserIconImageView"
+      android:layout_marginLeft="16dp"
+      android:layout_centerVertical="true" android:layout_alignParentLeft="true"
+      android:layout_alignParentStart="true" android:layout_marginStart="16dp"
+      android:background="@drawable/com_facebook_profile_picture_blank_square"
+      app:srcCompat="@drawable/avatar_frame"/>
+</RelativeLayout>

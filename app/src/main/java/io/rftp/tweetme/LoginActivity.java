@@ -12,12 +12,21 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.facebook.AccessToken;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.HttpMethod;
+
+import org.json.JSONObject;
 
 import io.rftp.RTException;
 import io.rftp.RTLogInCallback;
@@ -29,14 +38,20 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
   private EditText mLoginEditTextField;
   private EditText mPasswordEditTextField;
+  private ProgressBar mLoginProgressBar;
 
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_login);
-    getSupportActionBar().hide();
+    hideActionBar();
 
     initializeUI();
+  }
+
+  private void hideActionBar() {
+    ActionBar actionBar = getSupportActionBar();
+    if (actionBar != null) actionBar.hide();
   }
 
   @Override
@@ -55,6 +70,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
   }
 
   private void signIn() {
+    turnProgressBar(true);
     String login = getLoginFromEditTextField();
     String password = getPasswordFromEditTextField();
 
@@ -62,6 +78,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     RTUser.logInInBackground(login, password, new RTLogInCallback() {
       @Override
       public void done(RTUser rooftopUser, RTException e) {
+        turnProgressBar(false);
         if (e == null) {
           startMainActivity();
         } else {
@@ -73,6 +90,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
   }
 
   private void signUp() {
+    turnProgressBar(true);
+
     String login = getLoginFromEditTextField();
     String password = getPasswordFromEditTextField();
 
@@ -83,6 +102,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     newUser.signUpInBackground(new RTSignUpCallback() {
       @Override
       public void done(RTException e) {
+        turnProgressBar(false);
         if (e == null) {
           startMainActivity();
         } else {
@@ -95,19 +115,39 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
   }
 
   private void singInWithFacebook() {
+    turnProgressBar(true);
     //todo: use RooftopFacebookUtils
     RooftopFacebookUtils.logInWithReadPermissionsInBackground(LoginActivity.this, null, new RTLogInCallback() {
       @Override
       public void done(RTUser rooftopUser, RTException e) {
+        turnProgressBar(false);
         if (e == null) {
           if (rooftopUser != null) {
+            resetUserName(rooftopUser);
             startMainActivity();
-          } else {
-            RooftopFacebookUtils.logOut();
           }
         } else {
           Toast.makeText(LoginActivity.this, "Oops, retry your attempt. " + e.getMessage(), Toast.LENGTH_LONG).show();
         }
+      }
+
+      private void resetUserName(final RTUser user) {
+        String userId = AccessToken.getCurrentAccessToken().getUserId();
+        new GraphRequest(
+            AccessToken.getCurrentAccessToken(), userId, null, HttpMethod.GET,
+
+            new GraphRequest.Callback() {
+              public void onCompleted(GraphResponse response) {
+                JSONObject jsonResponse = response.getJSONObject();
+                String userName = jsonResponse.optString("name", null);
+                if (userName != null) {
+                  user.setUsername(userName);
+                  user.saveInBackground();
+                }
+              }
+            }
+
+        ).executeAsync();
       }
     });
     //-end
@@ -138,6 +178,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
   private void initializeUI() {
     mLoginEditTextField = (EditText)findViewById(R.id.loginEditText);
     mPasswordEditTextField = (EditText)findViewById(R.id.passwordEditText);
+    mLoginProgressBar = (ProgressBar)findViewById(R.id.loginProgressBar);
 
     ImageView signInButton = (ImageView)findViewById(R.id.signInButton);
     TextView signUpTV = (TextView)findViewById(R.id.signUpTV);
@@ -156,5 +197,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     signUpTV.setTypeface(Typeface.DEFAULT);
     nameOne.setTypeface(Typeface.MONOSPACE);
     nameTwo.setTypeface(Typeface.MONOSPACE);
+  }
+
+  private void turnProgressBar(boolean isOn) {
+    int visibility = isOn ? View.VISIBLE : View.GONE;
+    mLoginProgressBar.setVisibility(visibility);
+    mLoginProgressBar.setIndeterminate(isOn);
   }
 }

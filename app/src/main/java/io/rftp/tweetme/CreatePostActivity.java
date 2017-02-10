@@ -15,13 +15,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import io.rftp.RTException;
 import io.rftp.RTSaveCallback;
+import io.rftp.RTUser;
 
 public class CreatePostActivity extends AppCompatActivity {
   private EditText mPostBodyEditTextField;
+  private ProgressBar mLoginProgressBar;
 
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -45,12 +48,15 @@ public class CreatePostActivity extends AppCompatActivity {
 
   private void sendPost(String message) {
     //todo: create RTObject
+    turnProgressBar(true);
     Tweet post = new Tweet();
-    post.put("msg", message);
+    post.put(Tweet.MESSAGE_KEY, message);
+    post.put(Tweet.OWNER_KEY, RTUser.getCurrentUser());
     post.saveInBackground(new RTSaveCallback() {
       @Override
       public void done(RTException e) {
         //handle server response
+        turnProgressBar(false);
         if (e == null) {
           startMainActivity();
         } else {
@@ -76,5 +82,14 @@ public class CreatePostActivity extends AppCompatActivity {
 
   private void initializeUI() {
     mPostBodyEditTextField = (EditText)findViewById(R.id.createPostEditText);
+    mLoginProgressBar = (ProgressBar)findViewById(R.id.sendPostProgressBr);
+
+    MainActivity.setActionBarStyle(this);
+  }
+
+  private void turnProgressBar(boolean isOn) {
+//    int visibility = isOn ? View.VISIBLE : View.INVISIBLE;
+//    mLoginProgressBar.setVisibility(visibility);
+    mLoginProgressBar.setIndeterminate(isOn);
   }
 }

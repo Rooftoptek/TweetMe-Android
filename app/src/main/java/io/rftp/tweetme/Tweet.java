@@ -10,10 +10,15 @@ package io.rftp.tweetme;
 
 import io.rftp.RTClassName;
 import io.rftp.RTObject;
+import io.rftp.RTUser;
 
 @RTClassName("Tweetme")
 class Tweet extends RTObject {
-  private static final String MESSAGE_KEY = "msg";
+  public static final String MESSAGE_KEY = "msg";
+  public static final String OWNER_KEY = "owner";
+
+  public Tweet() {
+  }
 
   public void setMessage(String msg) {
     this.put(MESSAGE_KEY, msg);
@@ -21,5 +26,13 @@ class Tweet extends RTObject {
 
   public String getMessage() {
     return this.getString(MESSAGE_KEY);
+  }
+
+  public void setOwner(RTUser owner) {
+    this.put(OWNER_KEY, owner);
+  }
+
+  public RTUser getOwner() {
+    return this.getRTUser(OWNER_KEY);
   }
 }
